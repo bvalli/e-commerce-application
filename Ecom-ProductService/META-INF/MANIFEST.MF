@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ecom-ProductService
+Bundle-SymbolicName: Ecom-ProductService
+Bundle-Version: 1.0.0.qualifier
+Export-Package: com.example.demo,
+ com.example.demo.controller,
+ com.example.demo.entity,
+ com.example.demo.exception,
+ com.example.demo.repository
+Import-Package: com.example.demo.entity,
+ org.json
