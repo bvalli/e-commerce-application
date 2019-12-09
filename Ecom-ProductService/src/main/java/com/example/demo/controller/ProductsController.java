@@ -34,6 +34,7 @@ import com.example.demo.entity.Product;
 import com.example.demo.entity.userCart;
 import com.example.demo.repository.ProductInterface;
 import com.example.demo.repository.cartInterface;
+import com.example.demo.service.ProductService;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,7 +50,7 @@ public class ProductsController {
 	
 	@Autowired
 	
-	private ProductInterface productInterface;
+	private ProductService productServiceImpl;
 	
 	@Autowired
 	private cartInterface cartInterface;
@@ -57,34 +58,18 @@ public class ProductsController {
 	
 	@GetMapping(value="/getProductDetails",produces = "application/json") 
 	
-	public  String getProductDetails() throws JsonProcessingException
+	public  List<Product> getProductDetails() throws JsonProcessingException
 	{
-		System.out.println("inside getProductDetails");
-		List<Product> productData= (List<Product>) productInterface.findAll();
-		ObjectMapper objectMapper = new ObjectMapper();
-		String productDataAsString = objectMapper.writeValueAsString(productData.toString());
-		if(productDataAsString !=null)
-		{
-			return productDataAsString;
-		}
-		return productDataAsString;
+		return productServiceImpl.getProductDetails();
 
 	}
 	
 	@GetMapping("/productDetailsByProductId/{product_id}")
 	public List<Product> getProductDetailsByProductId(@PathVariable(name="product_id") int productId)
 	{
+		return productServiceImpl.getProductDetailsByProductId(productId);
 		
-		List<Product> cartdet=productInterface.getProductDetailsByProdId(productId);
-		/*
-		 * System.out.println(cartdet); ObjectMapper objectMapper = new ObjectMapper();
-		 * String productDataAsString = null; try { productDataAsString =
-		 * objectMapper.writeValueAsString(cartdet.toString()); } catch
-		 * (JsonProcessingException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); } if(productDataAsString !=null) { return
-		 * productDataAsString; } return productDataAsString;
-		 */
-		return cartdet;
+		
 	}
 	
 	
@@ -98,59 +83,16 @@ public class ProductsController {
 	@RequestMapping("/addToCart")
 	public ResponseEntity<String> addToCart()
 	{
-		System.out.println("inside add to cart");
-		userCart userc=new userCart();
-		List<Product> productList= new ArrayList<Product>();
-		Product prod1=Product.newProduct("1");
-		productList.add(prod1);
-		userc.setProductList(productList);
-		CustomerEntity customerEntity1 = CustomerEntity.newCustomerEntity("1");
-		Orders ordersEntity= new Orders();
-		ordersEntity.setOrderDate(LocalDate.now());
-		ordersEntity.setStatus("In Cart");
-		userc.setCustomerEntity(customerEntity1);
-	
-		prod1.setCart(userc);
-		prod1.setOrders(ordersEntity);
-		Product prod2=Product.newProduct("2");	
-		productList.add(prod2);
-		userc.setCustomerEntity(customerEntity1);
-		userc.setProductList(productList);
-		userc.setCartPrice(userc.getTotalOrderPrice());
-		//userc.setId(cartInterface.findcartbyId(cust_id));
-		
-		prod2.setCart(userc);
-
-		prod2.setOrders(ordersEntity);
-		
-		userc.setCartPrice(userc.getTotalOrderPrice());
-	
-	
-		Product cartout= productInterface.save(prod1);
-		Product cartout1= productInterface.save(prod2);
-			if(cartout != null && cartout1 != null )
-		{
-		 return new ResponseEntity<String>("Product added to cart successfully", HttpStatus.OK);
-		}
-		else
-		{
-			return new ResponseEntity<>("Product could not be added to cart ",HttpStatus.NOT_ACCEPTABLE);
-		}
+		return productServiceImpl.addToCart();
 		
 	}
 	
 	@GetMapping(value="/getCartDetails/{cust_id}",produces = "application/json")
 	
-	public @ResponseBody  List<Product> getCartdetails(@PathVariable(name="cust_id") int cust_id) throws JsonProcessingException, JSONException
+	public List<Product> getCartdetails(@PathVariable(name="cust_id") int cust_id) throws JsonProcessingException, JSONException
 	{
-		List<Product> cart= productInterface.findCartDetailsByCustId(cust_id);
-	//	ObjectMapper objectMapper = new ObjectMapper();
-	//	objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-	// objectMapper.writeValue(null, cart);
-	//	System.out.println(cartAsString);
-		return cart;
-		 
-
+		return productServiceImpl.getCartdetails(cust_id);
+	
 				 
 	}
 		
