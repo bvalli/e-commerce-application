@@ -1,55 +1,25 @@
 package com.example.demo.entity;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table
-
+@Document
 public class FinalOrder {
-	
+
 	@Id
-	@Column(name="Id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int Id;
-	
-	@Column(name="orderDate")
 	private LocalDate orderDate;
-	
-	@Column(name="orderAmount")
 	private float orderAmount;
-	
-	@Column(name="orderStatus")
 	private String orderStatus;
-	
-	@Column(name="productList")
-	@ElementCollection
-	@JsonProperty("Product")
-	@JsonIgnore
-	private List<Product> finalProductList;	
-	
-	@Column(name="custId")
+
+	private List<Product> finalProductList;
+
 	private int cust_id;
-	
+
 	public LocalDate getOrderDate() {
 		return orderDate;
 	}
@@ -74,8 +44,6 @@ public class FinalOrder {
 		this.orderStatus = orderStatus;
 	}
 
-	
-
 	public List<Product> getFinalProductList() {
 		return finalProductList;
 	}
@@ -92,21 +60,18 @@ public class FinalOrder {
 		this.cust_id = cust_id;
 	}
 
-	@Transient
 	public float getTotalOrderPrice(List<Product> prod) {
 		float sum = 0F;
-		//List<Product> cartProducts = prod;
-		
-		  for (Product op : prod)
-		  {
-			  sum += (op.getProductPrice())* (op.getQuantity()); 
-			  
-		  }
-		 
-	//	sum = price * quantity2;
+		// List<Product> cartProducts = prod;
+
+		for (Product op : prod) {
+			sum += (op.getProductPrice()) * (op.getQuantity());
+
+		}
+
+		// sum = price * quantity2;
 		System.out.println("Sum" + sum);
 		return sum;
 	}
-	
-	
+
 }
