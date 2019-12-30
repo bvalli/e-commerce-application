@@ -25,10 +25,10 @@ public class userCart implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO,generator="native")
-	@Column(name = "cart_id")
+	@Column(name = "id",nullable = false)
 	private int id;
 
-	@OneToMany(mappedBy="cart",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="cart",cascade = CascadeType.PERSIST)
 	private List<Product> productList;
 
 	public List<Product> getProductList() {
@@ -56,6 +56,11 @@ public class userCart implements Serializable {
 
 	
 
+	public userCart() {
+		
+	}
+
+
 	@Column(name = "quantity")
 	private int quantity;
 
@@ -80,19 +85,15 @@ public class userCart implements Serializable {
 	}
 
 	@Transient
-	public float getTotalOrderPrice() {
+	public void getTotalOrderPrice() {
 		float sum = 0F;
 		List<Product> cartProducts = getProductList();
+		cartProducts.stream().forEach((Product) -> {Product.getCart().setCartPrice((Product.getProductPrice() * Product.getQuantity()));     });
+		//return sum;
 		
-		  for (Product op : cartProducts)
-		  {
-			  sum += (op.getProductPrice())* (op.getQuantity()); 
-			  
-		  }
-		 
-	//	sum = price * quantity2;
-		System.out.println("Sum" + sum);
-		return sum;
+		
+		  
+		
 	}
 
 	public int getId() {

@@ -12,5 +12,7 @@ public interface ProductService {
 	public ResponseEntity<String> addToCart();
 	public List<Product> getProductDetailsByProductId(int productId);
 	public  List<Product> getProductDetails();
+	public List<Product> removeFromCart(int id);
+
 
 }

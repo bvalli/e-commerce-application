@@ -27,7 +27,8 @@ public class Product implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO,generator="native")
-	@Column(name="product_id")
+	@Column(name="product_id",nullable = false)
+	
 	private int id;
 	
 	@Column(name="product_name")
@@ -42,19 +43,11 @@ public class Product implements Serializable {
 	@Column(name="product_quantity")
 	private int quantity;
 	
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY )
-	@JoinColumn(name="cart_id",referencedColumnName = "cart_id")
+	@ManyToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY )
+	@JoinColumn(name="cartId",referencedColumnName = "id")
 	@NotFound(action = NotFoundAction.IGNORE)
-
-	private userCart cart;
-	
-	@ManyToOne(cascade = CascadeType.ALL,optional = false)
-	@JoinColumn(name="id",referencedColumnName = "id")
 	@JsonIgnore
-	@NotFound(action = NotFoundAction.IGNORE)
-	private Orders orders;
-	
-	
+	private userCart cart;
 	
 	public userCart getCart() {
 		return cart;
@@ -63,28 +56,21 @@ public class Product implements Serializable {
 	public void setCart(userCart cart) {
 		this.cart = cart;
 	}
-
-	public Orders getOrders() {
-		return orders;
-	}
-
-	public void setOrders(Orders orders) {
-		this.orders = orders;
-	}
-
 	
 
 	public Product()
 	{
 		
 	}
-	
+		
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getProductName() {
 		return productName;
 	}
@@ -110,17 +96,14 @@ public class Product implements Serializable {
 		this.quantity = quantity;
 	}
 	
-	
-	
-
 	@Override
 	public String toString() {
 		return "Product [productName=" + productName + ", productDescription=" + productDescription + ", productPrice="
-				+ productPrice + ", quantity=" + quantity + "]";
+				+ productPrice + ", quantity=" + quantity +  "]";
 	}
 
 	public Product(String productName, String productDescription, float productPrice, int quantity) {
-		super();
+		
 		this.productName = productName;
 		this.productDescription = productDescription;
 		this.productPrice = productPrice;

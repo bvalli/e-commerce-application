@@ -17,8 +17,9 @@ public interface ProductInterface extends CrudRepository<Product, Integer> {
 	@Query("from Product where product_id=:product_id")
 	public List<Product> getProductDetailsByProdId(@Param(value="product_id") int product_id);
 	
-	@Query("from Product where cart_id in (select id from userCart where cust_id=:cust_id )")
+	@Query("from Product where cartId in (select id from userCart where cust_id=:cust_id )")
 	public List<Product> findCartDetailsByCustId(@Param(value="cust_id")int cust_id);
+
 
 	
 }
